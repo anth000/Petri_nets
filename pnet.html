@@ -19,8 +19,9 @@
     <script src="js/pnet_run.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/ui.js"></script>
-	<style>
-	.fa-cog{font-size:36px;color:red;}
+    <script src="js/logs.js"></script>
+        <style>
+        .fa-cog{font-size:36px;color:red;}
         .cursor-hand {
             cursor: pointer;
         }
@@ -71,6 +72,14 @@
                     <button class="btn btn-danger btn-sm" id="btnStop">
                         <span class="glyphicon glyphicon-stop"></span> Stop
                     </button>
+                </div>
+                &nbsp;
+                <div class="btn-group">
+                    <button class="btn btn-warning btn-sm" id="btnLoadLog">
+                        <span class="glyphicon glyphicon-upload"></span> Load Log
+                    </button>
+                    <input id="logFileInput" type="file" style="display:none;" />
+                    <select id="caseFilter" class="btn btn-default btn-sm"><option value="*">All</option></select>
                 </div>
                 &nbsp;
                 <div class="btn-group">
@@ -169,6 +178,12 @@
         ini_button("btnClearPaper", function () { clear_paper(); }, "Clear canvas");
         ini_button("btnRun", function () { run_clicked(); }, "Run Petri Net graph");
         ini_button("btnStop", function () { stop_clicked(); }, "Stop running");
+        ini_button("btnLoadLog", function () { document.getElementById('logFileInput').click(); }, "Load log from CSV");
+        document.getElementById('logFileInput').addEventListener('change', function () {
+            if (this.files.length > 0) {
+                load_log_file(this.files[0]);
+            }
+        });
         ini_button("btnSaveLocal", function () { save_local(); }, "Save to local memory");
         ini_button("btnRestoreLocal", function () { restore_local(); }, "Restore from local memory");
         ini_button("btnFalseInput", function () { open_clicked(); }, "Open from file");
@@ -241,14 +256,17 @@
     }
     function run_clicked() {
         //console.log("graph_loaded=" + graph_loaded());
-        if (graph_loaded()) {
+        if (Logs.length > 0) {
+            set_run_icon();
+            set_status("Running log...");
+            lock_status();
+            start_log_simulation();
+        } else if (graph_loaded()) {
             set_run_icon();
             set_status("Running...");
             lock_status();
             StartRun();
-        }
-        else
-        {
+        } else {
             set_status("No valid graph loaded.");
         }
     }
@@ -264,7 +282,11 @@
             set_default_icon();
             unlock_status();
             set_status("Stopped.");
-            StopRun();
+            if (LogTimer) {
+                stop_log_simulation();
+            } else {
+                StopRun();
+            }
         }
         else {
             set_status("There is no running graph.");

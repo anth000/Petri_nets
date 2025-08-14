@@ -49,3 +49,52 @@ font-size:36px !important;
 color:red;
 }
   
+/* Dark theme overrides */
+body {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.navbar-default {
+  background-color: #1e293b;
+  border-color: #1e293b;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav>li>a {
+  color: #f8fafc;
+}
+
+.btn-primary,
+.btn-success,
+.btn-danger,
+.btn-info {
+  color: #f8fafc;
+}
+
+.btn-primary {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.btn-success {
+  background-color: #16a34a;
+  border-color: #16a34a;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
+.btn-info {
+  background-color: #0ea5e9;
+  border-color: #0ea5e9;
+}
+
+.center-container,
+.center-row,
+#wrap {
+  background-color: #0f172a;
+}
+
